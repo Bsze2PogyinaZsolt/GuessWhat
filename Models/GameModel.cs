@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GuessWhat.Models
 {
-    internal class GameModel
+    public class GameModel
     {
     }
 }
