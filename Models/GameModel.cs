@@ -20,9 +20,9 @@ namespace GuessWhat.Models
         {
             if (guess < randomNumber)
                 return "Higher";
-            else if (guess > randomNumber) 
+            else if (guess > randomNumber)
                 return "Lower";
-            else return "correct"
+            else return "correct";
         }
     }
 }
