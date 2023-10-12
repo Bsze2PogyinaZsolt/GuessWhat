@@ -12,16 +12,11 @@ using ViewModels.BaseClass;
 
 namespace GuessWhat.ViewModels
 {
-    public class GameViewModel
+    public class GameViewModel : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+
         private GameModel game;
-
-        public int Guess { get; set; }
-        public string Feedback { get; set; }
-        public int Attempts { get; set; }
-
-        public ICommand CheckGuessCommand { get; set; }
-        public ICommand StartNewGameCommand { get; set; }
 
         public GameViewModel()
         {
@@ -29,6 +24,42 @@ namespace GuessWhat.ViewModels
             StartNewGame();
             CheckGuessCommand = new RelayCommand(CheckGuess);
             StartNewGameCommand = new RelayCommand(StartNewGame);
+        }
+
+        public ICommand CheckGuessCommand { get; }
+        public ICommand StartNewGameCommand { get; }
+
+        private int guess;
+        public int Guess
+        {
+            get => guess;
+            set
+            {
+                guess = value;
+                OnPropertyChanged(nameof(Guess));
+            }
+        }
+
+        private string feedback;
+        public string Feedback
+        {
+            get => feedback;
+            set
+            {
+                feedback = value;
+                OnPropertyChanged(nameof(Feedback));
+            }
+        }
+
+        private int attempts;
+        public int Attempts
+        {
+            get => attempts;
+            set
+            {
+                attempts = value;
+                OnPropertyChanged(nameof(Attempts));
+            }
         }
 
         public void CheckGuess()
@@ -43,6 +74,11 @@ namespace GuessWhat.ViewModels
             Guess = 0;
             Feedback = "Guess the number!";
             Attempts = 0;
+        }
+
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
