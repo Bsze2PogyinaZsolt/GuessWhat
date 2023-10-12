@@ -5,20 +5,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls.Primitives;
-using System.ComponentModel;
 using System.Windows.Input;
 using GuessWhat.Models;
 using ViewModels.BaseClass;
 
+
 namespace GuessWhat.ViewModels
 {
-    public class GameViewModel : INotifyPropertyChanged
+    public class GameViewModel
     {
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        
         private GameModel game;
-       
+
+        public int Guess { get; set; }
+        public string Feedback { get; set; }
+        public int Attempts { get; set; }
 
         public ICommand CheckGuessCommand { get; set; }
         public ICommand StartNewGameCommand { get; set; }
@@ -27,47 +27,22 @@ namespace GuessWhat.ViewModels
         {
             game = new GameModel();
             StartNewGame();
+            CheckGuessCommand = new RelayCommand(CheckGuess);
+            StartNewGameCommand = new RelayCommand(StartNewGame);
         }
 
-        private int guess;
-        public int Guess 
-        { 
-            get=>guess; 
-            set 
-            { 
-                guess = value;
-                OnPropertyChanged(nameof(Guess)); 
-             }
-        }
-
-        private string feedback;
-        public string Feedback 
-        { get=>feedback; 
-            set
-            {
-                feedback = value;
-                OnPropertyChanged(nameof(Feedback));
-            }
-
-
-        private void CheckGuess()
+        public void CheckGuess()
         {
-
-            string result = game.CheckGuess(Guess);
             Feedback = game.CheckGuess(Guess);
+            Attempts = game.GetAttempts();
         }
 
-        private void StartNewGame()
+        public void StartNewGame()
         {
             game.StartNewGame();
             Guess = 0;
             Feedback = "Guess the number!";
+            Attempts = 0;
         }
-
-        private void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));  
-        }
-    
     }
 }
