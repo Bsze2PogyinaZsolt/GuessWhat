@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GuessWhat.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,15 @@ namespace GuessWhat
         public MainWindow()
         {
             InitializeComponent();
+        }
+        private void Check_Click(object sender, RoutedEventArgs e)
+        {
+            ((GameViewModel)DataContext).CheckGuess();
+        }
+
+        private void Repeat_Click(object sender, RoutedEventArgs e)
+        {
+            ((GameViewModel)DataContext).StartNewGame();
         }
     }
 }

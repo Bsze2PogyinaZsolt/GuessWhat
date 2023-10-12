@@ -1,20 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls.Primitives;
+using System.ComponentModel;
 using System.Windows.Input;
 using GuessWhat.Models;
 using ViewModels.BaseClass;
 
 namespace GuessWhat.ViewModels
 {
-    public class GameViewModel
+    public class GameViewModel : INotifyPropertyChanged
     {
-        private GameModel _game;
-        public int Guess { get; set; }
-        public string Feedback { get; set; }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        
+        private GameModel game;
+       
 
         public ICommand CheckGuessCommand { get; set; }
         public ICommand StartNewGameCommand { get; set; }
@@ -23,14 +27,33 @@ namespace GuessWhat.ViewModels
         {
             game = new GameModel();
             StartNewGame();
-            CheckGuessCommand = new RelayCommand(CheckGuess);
-            StartNewGameCommand = new RelayCommand(StartNewGame);
-
-
         }
+
+        private int guess;
+        public int Guess 
+        { 
+            get=>guess; 
+            set 
+            { 
+                guess = value;
+                OnPropertyChanged(nameof(Guess)); 
+             }
+        }
+
+        private string feedback;
+        public string Feedback 
+        { get=>feedback; 
+            set
+            {
+                feedback = value;
+                OnPropertyChanged(nameof(Feedback));
+            }
+
 
         private void CheckGuess()
         {
+
+            string result = game.CheckGuess(Guess);
             Feedback = game.CheckGuess(Guess);
         }
 
@@ -39,6 +62,11 @@ namespace GuessWhat.ViewModels
             game.StartNewGame();
             Guess = 0;
             Feedback = "Guess the number!";
+        }
+
+        private void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));  
         }
     
     }

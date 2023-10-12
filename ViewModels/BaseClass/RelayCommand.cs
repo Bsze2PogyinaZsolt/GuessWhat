@@ -9,43 +9,30 @@ namespace ViewModels.BaseClass
 {
     public class RelayCommand : ICommand
     {
-        private Action<object> execute;
-        private Func<object, bool> canExecute;
+        private readonly Action execute;
+        private readonly Func<bool> canExecute;
 
-        public event EventHandler CanExecuteChanged
-        {
-            add { CommandManager.RequerySuggested += value; }
-            remove { CommandManager.RequerySuggested -= value; }
-        }
+        public event EventHandler CanExecuteChanged;
 
-        public RelayCommand(Action<object> execute)
+        public RelayCommand(Action execute, Func<bool> canExecute = null)
         {
-            this.execute = execute;
-        }
-
-        public RelayCommand(Action<object> execute, Func<object, bool> canExecute) 
-            : this(execute)
-        {
-            this.execute = execute;
+            this.execute = execute ?? throw new ArgumentNullException(nameof(execute));
             this.canExecute = canExecute;
         }
 
         public bool CanExecute(object parameter)
         {
-            if (this.canExecute == null)
-            {
-                return true;
-            }
-            else
-            {
-                bool result = this.canExecute.Invoke(parameter);
-                return result;
-            }
+            return canExecute == null || canExecute();
         }
 
         public void Execute(object parameter)
         {
-            execute(parameter);
+            execute();
+        }
+
+        public void RaiseCanExecuteChanged()
+        {
+            CanExecuteChanged?.Invoke(this, EventArgs.Empty);
         }
     }
 }

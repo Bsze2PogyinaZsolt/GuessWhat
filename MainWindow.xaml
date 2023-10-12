@@ -13,10 +13,10 @@
     <Grid>
         <StackPanel Margin="20">
             <TextBlock Text="Guess the number between 1 and 100" FontWeight="Bold"/>
-            <TextBox Text="{Binding Guess}" Width="100 " Margin="0 10"/>
+            <TextBox Text="{Binding Guess, UpdateSourceTrigger=PropertyChanged}" Width="100 " Margin="0 10"/>
             <Button Content="Check"  Command="{Binding CheckGuessCommand}" Width="100" Margin="0 10"/>
-            <TextBlock Text="{Binding Feedback}"FontWeight="Bold" Margin="0 10"/>
-            <Button Content="Repeat" Command="{Binding StartNewGameCommand}" Width="100" Margin="0 10"/>
+            <TextBlock Text="{Binding Feedback, Mode=TwoWay}" FontWeight="Bold" Margin="0 10"/>
+            <Button Content="Repeat" Command="{Binding StartNewGameCommand}" Width="100" Margin="0 10" Click="Repeat_Click"/>
         </StackPanel>
 
     </Grid>
